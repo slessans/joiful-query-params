@@ -1,0 +1,35 @@
+{
+  "extends": [
+    "eslint-config-airbnb/rules/best-practices",
+    "eslint-config-airbnb/rules/errors",
+    "eslint-config-airbnb/rules/es6",
+    "eslint-config-airbnb/rules/legacy",
+    "eslint-config-airbnb/rules/node",
+    "eslint-config-airbnb/rules/style",
+    "eslint-config-airbnb/rules/variables"
+  ],
+  "env": {
+    "browser": false,
+    "node": true,
+    "es6": true
+  },
+  "rules": {
+    "semi": [2, "never"],
+    "no-unexpected-multiline": 2,
+    "indent": [2, 4, {"SwitchCase": 0, "VariableDeclarator": 1}],
+    "max-len": [2, 120],
+    "strict": [2, "global"],
+    "func-names": [0],
+    "no-param-reassign": [2, {"props": false}]
+  },
+  "plugins": [
+  ],
+  "ecmaFeatures": {
+    "modules": false,
+    "generators": true,
+    "blockBindings": true,
+    "classes": true,
+    "templateStrings": true,
+    "forOf": true
+  }
+}
