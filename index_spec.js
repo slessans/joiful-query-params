@@ -33,7 +33,7 @@ const _makeTest = (parser, query, validate) => (done) => {
 
 const _expectSuccess = (parser, query, result) => _makeTest(parser, query, (req, res, err) => {
     expect(err).to.not.be.ok
-    expect(req.parsedQueryParams).to.be.eql(result)
+    expect(req.parsedQuery).to.be.eql(result)
 })
 
 const _expectValidationError = (parser, query, validationErrors) => _makeTest(parser, query, (req, res, err) => {
@@ -60,7 +60,7 @@ describe('joiful-query-params', () => {
             },
         ]
     ))
-    it('should parse query and put it req.parsedQueryParams by default', _expectSuccess(
+    it('should parse query and put in req.parsedQuery by default', _expectSuccess(
         makeParamParser(joi.object().keys({
             page: joi.number(),
         })),

@@ -12,6 +12,8 @@ const DEFAULT_JOI_OPTIONS = {
     noDefaults: true,
 }
 
+const DEFAULT_DESTINATION_KEY = 'parsedQuery'
+
 /**
  * Configure and return a query param parser middleware function
  *
@@ -23,7 +25,7 @@ const DEFAULT_JOI_OPTIONS = {
  */
 module.exports = (schema, options, joiOptions) => {
     const joiOpts = Object.assign({}, DEFAULT_JOI_OPTIONS, joiOptions || {})
-    const requestDestinationKey = (options || {}).destinationKey || 'parsedQueryParams'
+    const requestDestinationKey = (options || {}).destinationKey || DEFAULT_DESTINATION_KEY
 
     return (req, res, next) => {
         joi.validate(req.query, schema, joiOpts, (error, value) => {
