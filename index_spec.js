@@ -9,7 +9,7 @@
 // const request = require('supertest')
 
 const expect = require('chai').expect
-const makeParamParser = require('./index')
+const makeParamParser = require('./index').makeMiddleware
 const joi = require('joi')
 const qs = require('querystring')
 

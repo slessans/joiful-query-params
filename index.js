@@ -12,29 +12,35 @@ const DEFAULT_JOI_OPTIONS = {
     noDefaults: true,
 }
 
-const DEFAULT_DESTINATION_KEY = 'parsedQuery'
+const DEFAULT_OPTIONS = {
+    destinationKey: 'parsedQuery',
+}
 
-/**
- * Configure and return a query param parser middleware function
- *
- * @param {object} schema joi schema
- * @param {object} [options] joi validation options
- * @param {string} [options.destinationKey] key of destination of param results on request
- * @param {object} [joiOptions] options to be passed through to joi validate options.
- * @return {Function}
- */
-module.exports = (schema, options, joiOptions) => {
-    const joiOpts = Object.assign({}, DEFAULT_JOI_OPTIONS, joiOptions || {})
-    const requestDestinationKey = (options || {}).destinationKey || DEFAULT_DESTINATION_KEY
+class QueryParamParser {
 
-    return (req, res, next) => {
-        joi.validate(req.query, schema, joiOpts, (error, value) => {
+    /**
+     * Construct a QueryParamParser
+     *
+     * @param {object} schema joi schema
+     * @param {object} [options] joi validation options
+     * @param {string} [options.destinationKey] key of destination of param results on request
+     * @param {object} [options.joiOptions] options to be passed through to joi validate options.
+     * @returns {QueryParamParser} new parser
+     */
+    constructor(schema, options) {
+        this._schema = schema
+        this._options = Object.assign({}, DEFAULT_OPTIONS, options || {})
+        this._options.joiOptions = Object.assign({}, DEFAULT_JOI_OPTIONS, this._options.joiOptions || {})
+    }
+
+    run(req, res, next) {
+        joi.validate(req.query, this._schema, this._options.joiOptions, (error, value) => {
             /* istanbul ignore else: joi should never throw an error that is not a validation error, so cant
              * figure out how to directly test the final else path. however, i would like to keep it in for
              * paranoia sake.
              */
             if (!error) {
-                req[requestDestinationKey] = value
+                this.didParseQueryParams(req, res, value)
                 next()
             } else if (error.name === 'ValidationError') {
                 const queryParamError = new Error('The request contained invalid query params.')
@@ -52,4 +58,27 @@ module.exports = (schema, options, joiOptions) => {
             }
         })
     }
+
+    didParseQueryParams(req, res, validatedParams) {
+        req[this._options.destinationKey] = validatedParams
+    }
+
+    asMiddleware() {
+        const self = this
+        return function () {
+            self.run.apply(self, arguments)
+        }
+    }
+}
+
+/**
+ * See constructor of QueryParamParser for param info
+ *
+ * @returns {function (req, res, next)} query parsing middleware
+ */
+const makeMiddleware = (schema, options) => new QueryParamParser(schema, options).asMiddleware()
+
+module.exports = {
+    QueryParamParser,
+    makeMiddleware,
 }
