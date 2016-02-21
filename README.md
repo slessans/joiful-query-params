@@ -4,6 +4,7 @@
 [![Build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
 [![Dependencies][deps-image]][deps-url]
+[![Peer Dependencies][deps-peer-image]][deps-peer-url]
 [![Dev Dependencies][deps-dev-image]][deps-dev-url]
 
 Use joi to validate and parse query params. Examples and docs coming soon.
@@ -22,3 +23,6 @@ Use joi to validate and parse query params. Examples and docs coming soon.
 
 [deps-dev-image]: https://img.shields.io/david/dev/slessans/joiful-query-params.svg?style=flat-square
 [deps-dev-url]: https://david-dm.org/slessans/joiful-query-params#info=devDependencies
+
+[deps-peer-image]: https://img.shields.io/david/peer/slessans/joiful-query-params.svg?style=flat-square
+[deps-peer-url]: https://david-dm.org/slessans/joiful-query-params#info=peerDependencies
